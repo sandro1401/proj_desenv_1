@@ -26,10 +26,10 @@ async function inserir(pessoa) {
 }
 
 // FUNCIONANDO!
-async function buscarPorId(id_aluno) {
-    const alunoBuscadoPorId = await alunoPersistencia.buscarPorId(id_aluno);
+async function buscarPorId(id) {
+    const alunoBuscadoPorId = await alunoPersistencia.buscarPorId(id);
     if(!alunoBuscadoPorId) {
-        throw { id: 404, mensagem: `aluno com ID ${id_aluno} não encontrado!` };
+        throw { id: 404, mensagem: `aluno com ID ${id} não encontrado!` };
     }else{
         return alunoBuscadoPorId;     
     }
@@ -79,11 +79,11 @@ async function buscarPorEmail(email) {
 
 
 // FUNCIONANDO!
-async function atualizar(id_aluno, pessoa){
+async function atualizar(id, pessoa){
     if(validarAluno(pessoa)) {
-        const alunoAtualizar = await buscarPorId(id_aluno)
+        const alunoAtualizar = await buscarPorId(id)
         if(alunoAtualizar) {
-            return await alunoPersistencia.atualizar(id_aluno, pessoa);
+            return await alunoPersistencia.atualizar(id, pessoa);
         }
         else{
             throw { id: 404, mensagem: "aluno não encontrado!" }
@@ -95,13 +95,13 @@ async function atualizar(id_aluno, pessoa){
 }
 
 // FUNCIONANDO!
-async function deletar(id_aluno){
-    const alunoDeletar = await buscarPorId(id_aluno)
+async function deletar(id){
+    const alunoDeletar = await buscarPorId(id)
     if(alunoDeletar){
-        return await alunoPersistencia.deletar(id_aluno);
+        return await alunoPersistencia.deletar(id);
     }
     else{
-        throw { id: 404, mensagem: `Aluno com Id ${id_aluno} não encontrado!` }
+        throw { id: 404, mensagem: `Aluno com Id ${id} não encontrado!` }
     }
 }
 

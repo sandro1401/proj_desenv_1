@@ -1,16 +1,53 @@
+const { Client } = require('pg');
 const alunoNegocio = require('./negocio/aluno_negocio')
-const pagamentoNegocio = require('./negocio/pagamento_negocio')
+const pagamentoNegocio = require('./negocio/pagamento_negocio');
+const { conexao } = require('./persistencia/conexao');
 
 async function main() {
 
 //     // ---------------- TESTES ALUNOS ------------------------
+
+    // SUCESSO: LISTAR alunoS:
+    try {
+        const listaalunos = await alunoNegocio.listar();
+        console.log("Lista de alunos",listaalunos);
+    }catch(err){
+        console.log(err)
+    }
+
+
     // SUCESSO: INSERIR aluno NOVO:
+    
+    try { 
+        const aluno = new Client(conexao)
+        await aluno.connect()
+    
+    
+        const alunoInserido1 = await alunoNegocio.inserir({sexo: "M", nome: "Aluno1", cpf: 678, dt_nascimento: "16/10/2000", telefone:'51995999531', email: "aluno1@gmail.com",  status: "Ativo", plano: "30 dias", idusuario: 1, idpagamento: 1  })
+        const aluno_id = aluno.query('select aluno.id from aluno where id == alunoInserido1.id')
+        const pagamento = new Client(conexao);
+        await pagamento.connect();
+        const pagamentoInserido1 = await pagamentoNegocio.inserir({id_aluno: aluno_id ,dt_pagamento: 10, status: "pendente", valor: 180})
+        console.log("aluno Inserido", alunoInserido1,  pagamentoInserido1);
+        
+    }
+    catch(err) {
+        console.log(err)
+    }
+    finally {
+        await aluno.end();
+        await pagamento.end();
+    }
+
+
     // try {
-    //     const alunoInserido1 = await alunoNegocio.inserir({sexo: "M", nome: "Aluno1", cpf: 678, dt_nascimento: "16/10/2000", telefone:'51995999531', email: "aluno1@gmail.com",  status: "Ativo", plano: "30 dias", idusuario: 1, idpagamento: 1  })
-    //     console.log("aluno1 Inserido", alunoInserido1);
-    // }catch(err) {
+    //     const listaalunos = await alunoNegocio.listar();
+    //     console.log("Lista de alunos",listaalunos);
+    // }catch(err){
     //     console.log(err)
     // }
+
+
 
 //     // SUCESSO: INSERIR aluno NOVO:
 //     try {
@@ -44,13 +81,6 @@ async function main() {
 //         console.log(err)
 //     }
 
-    // SUCESSO: LISTAR alunoS:
-    try {
-        const listaalunos = await alunoNegocio.listar();
-        console.log("Lista de alunos",listaalunos);
-    }catch(err){
-        console.log(err)
-    }
 
 //     // SUCESSO: BUSCAR ID_aluno 2:
 //     try {
@@ -178,14 +208,21 @@ async function main() {
 //     }
 
  // SUCESSO: LISTAR PAGAMENTOS:
- try {
-    const listarPagamentos = await pagamentoNegocio.listar();
-    console.log("Lista de pagamentos",listarPagamentos);
-}catch(err){
-    console.log(err)
-}
+//  try {
+//     const listarPagamentos = await pagamentoNegocio.listar();
+//     console.log("Lista de pagamentos",listarPagamentos);
+// }catch(err){
+//     console.log(err)
+// }
 
-
+    // SUCESSO: INSERIR pagamento NOVO:
+    // try {
+       
+    //     const pagamentoInserido1 = await pagamentoNegocio.inserir({id_aluno: 1 , dt_pagamento: 10, status: "pendente", valor: 180})
+    //        console.log("pagamento Inserido",  pagamentoInserido1);
+    // }catch(err) {
+    //     console.log(err)
+    // }
 
 
 }

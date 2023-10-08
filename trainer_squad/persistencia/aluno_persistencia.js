@@ -11,32 +11,55 @@ async function listar() {
     return res.rows;
 }
 
+// async function inserir(pessoa){
+//     const aluno = new Client(conexao)
+//     const pagamento = new Client(conexao)
+    
+//     await aluno.connect()
+//     await pagamento.connect()
+//     try{
+//         await aluno.query('BEGIN');
+//         const res = await aluno.query('INSERT INTO aluno(sexo, nome, cpf, dt_nascimento, telefone, email, status, plano, idusuario, idpagamento) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING *', 
+//             [pessoa.sexo, pessoa.nome, pessoa.cpf, pessoa.dt_nascimento, pessoa.telefone, pessoa.email,  pessoa.status, pessoa.plano, pessoa.idusuario, pessoa.idpagamento]);
+//         await pagamento.query('INSERT INTO pagamento(id_aluno, dt_pagamento, status, valor) VALUES($1, $2, $3, $4) RETURNING *',
+//         [pagamento.id_aluno, pagamento.dt_pagamento, pagamento.status, pagamento.valor]);
+//         await aluno.query('COMMIT');
+//         await aluno.end()
+//         await pagamento.end()
+//         return res.rows[0];
+//     }catch{
+//         await aluno.query('ROLLBACK');
+//     }
+    
+// }
 async function inserir(pessoa){
     const aluno = new Client(conexao)
+    const pagamento = new Client(conexao)
     
     await aluno.connect()
+    // await pagamento.connect()
     try{
         await aluno.query('BEGIN');
         const res = await aluno.query('INSERT INTO aluno(sexo, nome, cpf, dt_nascimento, telefone, email, status, plano, idusuario, idpagamento) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING *', 
-        [pessoa.sexo, pessoa.nome, pessoa.cpf, pessoa.dt_nascimento, pessoa.telefone, pessoa.email,  pessoa.status, pessoa.plano, pessoa.idusuario, pessoa.idpagamento]);
+            [pessoa.sexo, pessoa.nome, pessoa.cpf, pessoa.dt_nascimento, pessoa.telefone, pessoa.email,  pessoa.status, pessoa.plano, pessoa.idusuario, pessoa.idpagamento]);
         await aluno.query('INSERT INTO pagamento(id_aluno, dt_pagamento, status, valor) VALUES($1, $2, $3, $4) RETURNING *',
-        [aluno.id, pagamento.dt_pagamento, pagamento.status, pagamento.valor]);
+            [pagamento.id_aluno, pagamento.dt_pagamento, pagamento.status, pagamento.valor]);
         await aluno.query('COMMIT');
         await aluno.end()
+        // await pagamento.end()
         return res.rows[0];
     }catch{
         await aluno.query('ROLLBACK');
     }
     
 }
-
-async function buscarPorId(id_aluno) {
+async function buscarPorId(id) {
     const aluno = new Client(conexao)
 
     await aluno.connect()
   
-    const res = await aluno.query('SELECT * FROM aluno WHERE id_aluno = $1',
-    [id_aluno]);
+    const res = await aluno.query('SELECT * FROM aluno WHERE id = $1',
+    [id]);
     await aluno.end();
     return res.rows[0];
 }
@@ -75,24 +98,24 @@ async function buscarPorEmail(email) {
     await aluno.end();
     return res.rows[0];
 }
-async function atualizar(id_aluno, pessoa) {
+async function atualizar(id, pessoa) {
     const aluno = new Client(conexao)
 
     await aluno.connect()
 
     const res = await aluno.query('UPDATE aluno SET nome = $1, cpf = $2, email = $3, telefone = $4, dta_nascimento = $5, sexo = $6, avaliacao_fisica = $7 WHERE id_aluno = $8 RETURNING *', 
-    [pessoa.nome, pessoa.cpf, pessoa.email, pessoa.telefone, pessoa.dta_nascimento, pessoa.sexo, pessoa.avaliacao_fisica, id_aluno]);
+    [pessoa.nome, pessoa.cpf, pessoa.email, pessoa.telefone, pessoa.dta_nascimento, pessoa.sexo, pessoa.avaliacao_fisica, id]);
     await aluno.end()
     return res.rows[0]
 }
 
-async function deletar(id_aluno) {
+async function deletar(id) {
     const aluno = new Client(conexao)
 
     await aluno.connect()
 
     const res = await aluno.query('DELETE FROM aluno WHERE id_aluno = $1 RETURNING *', 
-    [id_aluno]);
+    [id]);
     await aluno.end()
     return res.rows[0]
 }
