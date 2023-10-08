@@ -15,18 +15,26 @@ async function inserir(pessoa){
     const aluno = new Client(conexao)
     
     await aluno.connect()
-
-    const res = await aluno.query('INSERT INTO aluno(nome, cpf, email, telefone, dta_nascimento, sexo, avaliacao_fisica) VALUES($1, $2, $3, $4, $5, $6, $7) RETURNING *', 
-    [pessoa.nome, pessoa.cpf, pessoa.email, pessoa.telefone, pessoa.dta_nascimento, pessoa.sexo, pessoa.avaliacao_fisica]);
-    await aluno.end()
-    return res.rows[0]
+    try{
+        await aluno.query('BEGIN');
+        const res = await aluno.query('INSERT INTO aluno(sexo, nome, cpf, dt_nascimento, telefone, email, status, plano, idusuario, idpagamento) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING *', 
+        [pessoa.sexo, pessoa.nome, pessoa.cpf, pessoa.dt_nascimento, pessoa.telefone, pessoa.email,  pessoa.status, pessoa.plano, pessoa.idusuario, pessoa.idpagamento]);
+        await aluno.query('INSERT INTO pagamento(id_aluno, dt_pagamento, status, valor) VALUES($1, $2, $3, $4) RETURNING *',
+        [aluno.id, pagamento.dt_pagamento, pagamento.status, pagamento.valor]);
+        await aluno.query('COMMIT');
+        await aluno.end()
+        return res.rows[0];
+    }catch{
+        await aluno.query('ROLLBACK');
+    }
+    
 }
 
 async function buscarPorId(id_aluno) {
     const aluno = new Client(conexao)
 
     await aluno.connect()
-
+  
     const res = await aluno.query('SELECT * FROM aluno WHERE id_aluno = $1',
     [id_aluno]);
     await aluno.end();

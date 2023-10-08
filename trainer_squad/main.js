@@ -1,16 +1,16 @@
 const alunoNegocio = require('./negocio/aluno_negocio')
-
+const pagamentoNegocio = require('./negocio/pagamento_negocio')
 
 async function main() {
 
 //     // ---------------- TESTES ALUNOS ------------------------
-//     // SUCESSO: INSERIR aluno NOVO:
-//     try {
-//         const alunoInserido1 = await alunoNegocio.inserir({nome: "aluno1", cpf: 12345678, email: "aluno1@gmail.com", telefone:123,  dta_nascimento: "16/10/2000", sexo: "M",avaliacao_fisica: "Hipertenso + sobrepeso"})
-//         console.log("aluno1 Inserido", alunoInserido1);
-//     }catch(err) {
-//         console.log(err)
-//     }
+    // SUCESSO: INSERIR aluno NOVO:
+    // try {
+    //     const alunoInserido1 = await alunoNegocio.inserir({sexo: "M", nome: "Aluno1", cpf: 678, dt_nascimento: "16/10/2000", telefone:'51995999531', email: "aluno1@gmail.com",  status: "Ativo", plano: "30 dias", idusuario: 1, idpagamento: 1  })
+    //     console.log("aluno1 Inserido", alunoInserido1);
+    // }catch(err) {
+    //     console.log(err)
+    // }
 
 //     // SUCESSO: INSERIR aluno NOVO:
 //     try {
@@ -176,6 +176,17 @@ async function main() {
 //     }catch(err){
 //         console.log(err)
 //     }
+
+ // SUCESSO: LISTAR PAGAMENTOS:
+ try {
+    const listarPagamentos = await pagamentoNegocio.listar();
+    console.log("Lista de pagamentos",listarPagamentos);
+}catch(err){
+    console.log(err)
+}
+
+
+
 
 }
 

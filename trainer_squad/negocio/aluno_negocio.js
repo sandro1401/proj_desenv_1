@@ -14,19 +14,15 @@ async function listar() {
 }
 // FUNCIONANDO!!!
 async function inserir(pessoa) {
-    if(pessoa && pessoa.nome && pessoa.cpf && pessoa.email && pessoa.telefone && pessoa.dta_nascimento && pessoa.sexo && pessoa.avaliacao_fisica) {
+    if(pessoa && pessoa.sexo && pessoa.nome && pessoa.cpf && pessoa.dt_nascimento && pessoa.telefone && pessoa.email && pessoa.status && pessoa.plano && pessoa.idusuario && pessoa.idpagamento) {
         const alunoBuscadoPorCpf = await alunoPersistencia.buscarPorCpf(pessoa.cpf);
         if(!alunoBuscadoPorCpf) {
             const alunoInserido = await alunoPersistencia.inserir(pessoa);
             return alunoInserido;
         }
-        else{
-            throw { id: 402, mensagem: "Aluno já cadastrado!"}
-        }
-    }
-    else {
-        throw { id: 400, mensagem: "Faltam parâmetros!"};
-    }
+        else{throw { id: 402, mensagem: "Aluno já cadastrado!"}}
+        
+    }else {throw { id: 400, mensagem: "Faltam parâmetros!"};}
 }
 
 // FUNCIONANDO!
