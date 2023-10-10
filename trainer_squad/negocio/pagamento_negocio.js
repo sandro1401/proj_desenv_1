@@ -26,11 +26,9 @@ async function listar() {
 // }
 async function inserir(pagamento) {
         if(pagamento && pagamento.id_aluno && pagamento.dt_pagamento && pagamento.status && pagamento.valor) {
-            const alunoBuscadoPorId = await alunoPersistencia.buscarPorId(pagamento.id_aluno);
-            if(!alunoBuscadoPorId) {
-                const pagamentoInserido = await pagamentoPersistencia.inserir(pagamento);
+            {const pagamentoInserido = await pagamentoPersistencia.inserir(pagamento);
                 return pagamentoInserido;
-            }else{throw { id: 402, mensagem: "Aluno já cadastrado!"}}
+            }
             
         }else {throw { id: 400, mensagem: "Faltam parâmetros no pagamento!"};}
     }

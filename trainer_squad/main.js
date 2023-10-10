@@ -8,37 +8,69 @@ async function main() {
 //     // ---------------- TESTES ALUNOS ------------------------
 
     // SUCESSO: LISTAR alunoS:
-    try {
-        const listaalunos = await alunoNegocio.listar();
-        console.log("Lista de alunos",listaalunos);
-    }catch(err){
-        console.log(err)
-    }
+    // try {
+    //     const listaalunos = await alunoNegocio.listar();
+    //     console.log("Lista de alunos",listaalunos);
+    // }catch(err){
+    //     console.log(err)
+    // }
 
 
     // SUCESSO: INSERIR aluno NOVO:
     
-    try { 
-        const aluno = new Client(conexao)
-        await aluno.connect()
-    
-    
-        const alunoInserido1 = await alunoNegocio.inserir({sexo: "M", nome: "Aluno1", cpf: 678, dt_nascimento: "16/10/2000", telefone:'51995999531', email: "aluno1@gmail.com",  status: "Ativo", plano: "30 dias", idusuario: 1, idpagamento: 1  })
-        const aluno_id = aluno.query('select aluno.id from aluno where id == alunoInserido1.id')
-        const pagamento = new Client(conexao);
-        await pagamento.connect();
-        const pagamentoInserido1 = await pagamentoNegocio.inserir({id_aluno: aluno_id ,dt_pagamento: 10, status: "pendente", valor: 180})
-        console.log("aluno Inserido", alunoInserido1,  pagamentoInserido1);
+    // try { 
         
-    }
-    catch(err) {
-        console.log(err)
-    }
-    finally {
-        await aluno.end();
-        await pagamento.end();
-    }
-
+    //     // const aluno = new Client(conexao)
+       
+    //     // await aluno.connect()
+   
+    //     const alunoInserido1 = await alunoNegocio.inserir({sexo: "M", nome: "Aluno2", cpf: 4008, dt_nascimento: "16/10/2000", telefone:'51995999531', email: "aluno1@gmail.com",  status: "Ativo", plano: "30 dias", idusuario: 1},
+    //     { dt_pagamento: 10, status: "pendente", valor: 180})    
+     
+    //     console.log("aluno Inserido", alunoInserido1);
+    //     // await aluno.end();
+       
+    // }
+    // catch(err){
+    //     console.log(err)
+    // }
+    // async function inserir(pessoa, pagamento) {
+        const aluno = new Client(conexao);
+        const pagamento = new Client(conexao)
+    
+        await aluno.connect();
+        await pagamento.connect();
+    
+        try {
+            await aluno.query('BEGIN');
+    
+            // Inserir informações do aluno
+            const alunoQuery = await alunoNegocio.inserir({sexo: "M", nome: "Aluno2", cpf: 92740208, dt_nascimento: "16/10/2000", telefone:'51995999531', email: "aluno1@gmail.com",  status: "Ativo", plano: "30 dias", idusuario: 1}
+                
+            );
+    
+            // Obter o ID do aluno inserido
+            const alunoId = aluno.query('select id from aluno ORDER BY id DESC LIMIT 1');
+            console.log(alunoId)
+    
+            // Inserir informações de pagamento relacionadas ao aluno
+            const pagamentoQuery = await pagamentoNegocio.inserir(
+                {id_aluno: {alunoId}, dt_pagamento: 10, status: "pendente", valor: 180}
+            );
+    
+            await aluno.query('COMMIT');
+    
+            await aluno.end();
+    
+            // Retornar o resultado da inserção do aluno e do pagamento
+            return { aluno: alunoQuery.rows[0], pagamento: pagamentoQuery.rows[0] };
+        } catch (error) {
+            await aluno.query('ROLLBACK');
+            console.error('Erro durante a inserção:', error);
+            throw error; // Re-throw the error for higher-level handling, if needed
+        }
+    // }
+    
 
     // try {
     //     const listaalunos = await alunoNegocio.listar();
@@ -215,7 +247,7 @@ async function main() {
 //     console.log(err)
 // }
 
-    // SUCESSO: INSERIR pagamento NOVO:
+//    SUCESSO: INSERIR pagamento NOVO:
     // try {
        
     //     const pagamentoInserido1 = await pagamentoNegocio.inserir({id_aluno: 1 , dt_pagamento: 10, status: "pendente", valor: 180})

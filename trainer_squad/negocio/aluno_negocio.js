@@ -14,7 +14,7 @@ async function listar() {
 }
 // FUNCIONANDO!!!
 async function inserir(pessoa) {
-    if(pessoa && pessoa.sexo && pessoa.nome && pessoa.cpf && pessoa.dt_nascimento && pessoa.telefone && pessoa.email && pessoa.status && pessoa.plano && pessoa.idusuario && pessoa.idpagamento) {
+    if(pessoa && pessoa.sexo && pessoa.nome && pessoa.cpf && pessoa.dt_nascimento && pessoa.telefone && pessoa.email && pessoa.status && pessoa.plano && pessoa.idusuario ) {
         const alunoBuscadoPorCpf = await alunoPersistencia.buscarPorCpf(pessoa.cpf);
         if(!alunoBuscadoPorCpf) {
             const alunoInserido = await alunoPersistencia.inserir(pessoa);

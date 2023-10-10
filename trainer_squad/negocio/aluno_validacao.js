@@ -1,7 +1,7 @@
  
 
 function validarAluno(pessoa){
-    return pessoa && pessoa.sexo && pessoa.nome && pessoa.cpf && pessoa.dt_nascimento && pessoa.telefone && pessoa.email &&  pessoa.status && pessoa.plano && pessoa.idusuario && pessoa.idpagamento &&
+    return pessoa && pessoa.sexo && pessoa.nome && pessoa.cpf && pessoa.dt_nascimento && pessoa.telefone && pessoa.email &&  pessoa.status && pessoa.plano && pessoa.idusuario && 
         typeof pessoa.nome == 'string' && 
         typeof pessoa.cpf == "number" &&
         typeof pessoa.email == 'string' &&
@@ -9,8 +9,8 @@ function validarAluno(pessoa){
         typeof pessoa.sexo == 'string' &&
         typeof pessoa.status == 'string' &&
         typeof pessoa.plano == 'string' &&
-        typeof pessoa.Iusuario == 'number' &&
-        typeof pessoa.idpagamento == 'number'
+        typeof pessoa.Iusuario == 'number'
+        
 }
 
 module.exports = {
