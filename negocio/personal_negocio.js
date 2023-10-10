@@ -110,6 +110,27 @@ async function atualizarUsuario(id, usuarios) {
     }
 }
 
+// Update - senha
+async function autalizarSenha(id, senha) {
+    if (senha) {
+        const senhaAtualizada = await persistencia.autalizarSenha(id, senha)
+
+        if(!senhaAtualizada) {
+            let erro = new Error()
+            erro.message = "Usuário não encontrado."
+            erro.status = 404
+            throw erro
+        }
+
+        return senhaAtualizada
+    } else {
+        let erro = new Error()
+        erro.message = "Campo obrigatório."
+        erro.status = 400
+        throw erro
+    }
+}
+
 // Delete
 async function deletarUsuario(id) {
     try {
@@ -126,6 +147,26 @@ async function deletarUsuario(id) {
     } catch (error) { throw error }
 }
 
+// TREINOS
+
+async function addTreino(idAluno, treino) {
+    if (treino && treino.carga && treino.serie && treino.exercicio && treino.tipo && treino.repeticao && idAluno) {
+        try {
+            const treinos = await persistencia.addTreino(idAluno, treino)
+            console.log("Treino adicionado com sucesso:", treinos)
+            return treinos
+        } catch (error) { 
+            console.error("Erro ao adicionar treino:", error) 
+            throw error 
+        }
+    } else {
+        const erro = new Error()
+        erro.message = "Todos os campos são obrigatórios."
+        erro.status = 400
+        throw erro
+    }
+}
+
 module.exports = {
     addUsuario,
     buscarUsuario,
@@ -133,5 +174,7 @@ module.exports = {
     buscarUsuarioPorEmail,
     buscarUsuarioPorId,
     atualizarUsuario,
-    deletarUsuario
+    autalizarSenha,
+    deletarUsuario,
+    addTreino
 }

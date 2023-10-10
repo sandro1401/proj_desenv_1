@@ -9,7 +9,7 @@ async function addUsuario(usuario) {
     client.connect()
 
     try {
-        const sql = `INSERT INTO personal(nome, email, senha) VALUES($1, $2, $3) RETURNING *`
+        const sql = `INSERT INTO usuario(nome, email, senha) VALUES($1, $2, $3) RETURNING *`
         const values = [usuario.nome, usuario.email, usuario.senha]
         const usuarios = await client.query(sql, values)
 
@@ -24,7 +24,7 @@ async function buscarUsuario() {
     client.connect()
 
     try {
-        const sql = `SELECT * FROM personal`
+        const sql = `SELECT * FROM usuario`
         const usuario = await client.query(sql)
 
         client.end()
@@ -37,7 +37,7 @@ async function buscarUsuarioPorNome(nome) {
     client.connect()
 
     try {
-        const sql = `SELECT * FROM personal WHERE nome = $1`
+        const sql = `SELECT * FROM usuario WHERE nome = $1`
         const values = [nome]
         const nomeUsuario = await client.query(sql, values)
 
@@ -51,7 +51,7 @@ async function buscarUsuarioPorEmail(email) {
     client.connect()
 
     try {
-        const sql = `SELECT * FROM personal WHERE email = $1`
+        const sql = `SELECT * FROM usuario WHERE email = $1`
         const values = [email]
         const emailUsuario = await client.query(sql, values)
 
@@ -65,7 +65,7 @@ async function buscarUsuarioPorId(id) {
     client.connect()
 
     try {
-        const sql = `SELECT * FROM personal WHERE id = $1`
+        const sql = `SELECT * FROM usuario WHERE id = $1`
         const values = [id]
         const idUsuario = await client.query(sql, values)
 
@@ -80,12 +80,27 @@ async function atualizarUsuario(id, usuarios) {
     client.connect()
 
     try {
-        const sql = `UPDATE personal SET nome = $1, email = $2, senha = $3 WHERE id = $4 RETURNING *`
+        const sql = `UPDATE usuario SET nome = $1, email = $2, senha = $3 WHERE id = $4 RETURNING *`
         const values = [usuarios.nome, usuarios.email, usuarios.senha, id]
         const usuarioAtualizado = await client.query(sql, values)
 
         client.end()
         return usuarioAtualizado.rows[0]
+    } catch (error) { throw error }
+}
+
+// Update - senha
+async function autalizarSenha(id, senha) {
+    const client = new Client(conexao)
+    client.connect()
+
+    try {
+        const sql = `UPDATE usuario SET senha = $1 WHERE id = $2 RETURNING *`
+        const values = [senha, id]
+        const senhaAtualizada = await client.query(sql, values)
+
+        client.end()
+        return senhaAtualizada.rows[0]
     } catch (error) { throw error }
 }
 
@@ -95,12 +110,30 @@ async function deletarUsuario(id) {
     client.connect()
 
     try {
-        const sql = `DELETE FROM personal WHERE id = $1 RETURNING *`
+        const sql = `DELETE FROM usuario WHERE id = $1 RETURNING *`
         const values = [id]
         const clienteDeletado = await client.query(sql, values)
 
         client.end()
         return clienteDeletado.rows[0]
+    } catch (error) { throw error }
+}
+
+// TREINOS
+
+async function addTreino(idAluno, treino) {
+    const client = new Client(conexao)
+    client.connect()
+
+    try {
+        const sql = `INSERT INTO treino(obs, carga, serie, exercicio, tipo, repeticao, idAluno)
+                                 VALUES($1, $2, $3, $4, $5, $6, $7) RETURNING *`
+        const values = [treino.obs, treino.carga, treino.serie, treino.exercicio, treino.tipo, treino.repeticao, idAluno]
+
+        const treinos = await client.query(sql, values) 
+
+        await client.end()
+        return treinos.rows[0]
     } catch (error) { throw error }
 }
 
@@ -111,5 +144,7 @@ module.exports = {
     buscarUsuarioPorEmail,
     buscarUsuarioPorId,
     atualizarUsuario,
-    deletarUsuario
+    autalizarSenha,
+    deletarUsuario,
+    addTreino
 }
