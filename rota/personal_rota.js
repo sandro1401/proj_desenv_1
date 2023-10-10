@@ -5,6 +5,7 @@ const router = express.Router()
 
 router.post('/', controller.addUsuario)
 router.post('/:id', controller.addTreino)
+router.post('/aluno/:id', controller.addAluno)
 router.get('/users', controller.buscarUsuario)
 router.get('/nome/:nome', controller.buscarUsuarioPorNome)
 router.get('/email/:email', controller.buscarUsuarioPorEmail)

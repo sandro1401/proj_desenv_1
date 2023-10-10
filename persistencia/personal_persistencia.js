@@ -137,6 +137,37 @@ async function addTreino(idAluno, treino) {
     } catch (error) { throw error }
 }
 
+// ALUNOS E PAGAMENTOS
+
+async function addAluno(idUsuario, aluno) {
+    let resAluno
+    const client = new Client(conexao)
+    client.connect()
+
+    try {
+        await client.query('BEGIN')
+
+        const sql = `INSERT INTO aluno(sexo, nome, cpf, dt_nascimento, telefone, email, status, plano, idUsuario)
+                                VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING id`
+        const values = [aluno.sexo, aluno.nome, aluno.cpf, aluno.dt_nascimento, aluno.telefone, aluno.email, aluno.status, 
+                        aluno.plano, idUsuario]       
+        resAluno = await client.query(sql, values)                         
+
+        const sqlPag = `INSERT INTO pagamento(id_aluno, dt_pagamento, status, valor) VALUES($1, $2, $3, $4) RETURNING *`
+        const valuesPag = [resAluno.rows[0].id, aluno.pagamento.dt_pagamento, aluno.pagamento.status, aluno.pagamento.valor]
+        const pag = await client.query(sqlPag, valuesPag)
+
+        await client.query('COMMIT')
+
+        return { aluno: resAluno.rows[0], pagamento: pag.rows[0] };
+    } catch (error) {
+        await client.query('ROLLBACK'); 
+        throw error;
+    } finally {
+        client.end() 
+    }
+}
+
 module.exports = {
     addUsuario,
     buscarUsuario,
@@ -146,5 +177,6 @@ module.exports = {
     atualizarUsuario,
     autalizarSenha,
     deletarUsuario,
-    addTreino
+    addTreino,
+    addAluno
 }

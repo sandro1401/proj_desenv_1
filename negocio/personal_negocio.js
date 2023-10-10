@@ -156,7 +156,6 @@ async function addTreino(idAluno, treino) {
             console.log("Treino adicionado com sucesso:", treinos)
             return treinos
         } catch (error) { 
-            console.error("Erro ao adicionar treino:", error) 
             throw error 
         }
     } else {
@@ -165,6 +164,26 @@ async function addTreino(idAluno, treino) {
         erro.status = 400
         throw erro
     }
+}
+
+// ALUNOS E PAGAMENTOS
+
+async function addAluno(idUsuario, aluno) {
+    console.log("Conteúdo do objeto aluno recebido:", aluno)
+    if (aluno && aluno.sexo && aluno.nome && aluno.cpf && aluno.dt_nascimento && aluno.telefone && aluno.email && aluno.status
+        && aluno.plano && idUsuario) {
+            try {
+                const alunoAdd = await persistencia.addAluno(idUsuario, aluno)
+                return alunoAdd
+            } catch (error) {
+                throw error 
+            }
+        } else {
+            const erro = new Error()
+            erro.message = "Todos os campos são obrigatórios."
+            erro.status = 400
+            throw erro
+        }
 }
 
 module.exports = {
@@ -176,5 +195,6 @@ module.exports = {
     atualizarUsuario,
     autalizarSenha,
     deletarUsuario,
-    addTreino
+    addTreino,
+    addAluno
 }
