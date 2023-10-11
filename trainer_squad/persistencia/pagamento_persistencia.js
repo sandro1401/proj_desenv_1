@@ -1,33 +1,31 @@
 const { Client } = require('pg')
 const { conexao } = require('./conexao')
 
-async function listar() {
-    const cliente = new Client(conexao)
-    await cliente.connect();
-    const res = await cliente.query('SELECT * FROM pagamento');
-    await cliente.end();
-    return res.rows;
+// Iniciando CRUD
+
+// Create
+
+
+// PAGAMENTOS
+
+async function addPagamento(idAluno, pagamento) {
+    const client = new Client(conexao)
+    client.connect()
+
+    try {
+        const sql = `INSERT INTO pagamento(id_aluno, dt_pagamento, status, valor) 
+                    VALUES ($1,$2,$3,$4) RETURNING *`
+        const values = [idAluno, pagamento.dt_pagamento, pagamento.status, pagamento.valor]
+
+        const treinos = await client.query(sql, values) 
+
+        await client.end()
+        return pagamento.rows[0]
+    } catch (error) { throw error }
 }
-
-async function inserir(pagamento){
-    const aluno = new Client(conexao)
-    await aluno.connect()
-    // await pagamento.connect()
-    
-    const cliente = new Client(conexao)
-    await cliente.connect();
-   
-    const  res = await cliente.query('INSERT INTO pagamento(id_aluno, dt_pagamento, status, valor) VALUES ($1,$2,$3,$4) RETURNING *',
-    [pagamento.aluno_id, pagamento.dt_pagamento, pagamento.status, pagamento.valor]);
-    await cliente.end()
-    await aluno.end()
-   
-    return res.rows[0];
-}
-
-
-
 
 module.exports = {
-    listar, inserir
+  
+    addPagamento
 }
+

@@ -1,111 +1,177 @@
-const alunoPersistencia = require('../persistencia/aluno_persistencia')
-const { validarAluno } = require('./aluno_validacao')
+const persistencia = require('../persistencia/aluno_persistencia')
+// const { validarAluno } = require('./aluno_validacao')
 
 
-// FUNCIONANDO!
-async function listar() {
-    const alunosListados = await alunoPersistencia.listar();
-    if (alunosListados) {
-        return alunosListados;
-    }    
-    else {
-        throw { id: 500, mensagem: "Lista de alunos vazia!" };
-    }
-}
-// FUNCIONANDO!!!
-async function inserir(pessoa) {
-    if(pessoa && pessoa.sexo && pessoa.nome && pessoa.cpf && pessoa.dt_nascimento && pessoa.telefone && pessoa.email && pessoa.status && pessoa.plano && pessoa.idusuario ) {
-        const alunoBuscadoPorCpf = await alunoPersistencia.buscarPorCpf(pessoa.cpf);
-        if(!alunoBuscadoPorCpf) {
-            const alunoInserido = await alunoPersistencia.inserir(pessoa);
-            return alunoInserido;
+
+// Iniciando CRUD
+
+// Create
+async function addAluno(idUsuario, aluno) {
+    console.log("Conteúdo do objeto aluno recebido:", aluno)
+    if (aluno && aluno.sexo && aluno.nome && aluno.cpf && aluno.dt_nascimento && aluno.telefone && aluno.email && aluno.status
+        && aluno.plano && idUsuario) {
+            try {
+                const alunoAdd = await persistencia.addAluno(idUsuario, aluno)
+                return alunoAdd
+            } catch (error) {
+                throw error 
+            }
+        } else {
+            const erro = new Error()
+            erro.message = "Todos os campos são obrigatórios."
+            erro.status = 400
+            throw erro
         }
-        else{throw { id: 402, mensagem: "Aluno já cadastrado!"}}
-        
-    }else {throw { id: 400, mensagem: "Faltam parâmetros!"};}
-}
-
-// FUNCIONANDO!
-async function buscarPorId(id) {
-    const alunoBuscadoPorId = await alunoPersistencia.buscarPorId(id);
-    if(!alunoBuscadoPorId) {
-        throw { id: 404, mensagem: `aluno com ID ${id} não encontrado!` };
-    }else{
-        return alunoBuscadoPorId;     
-    }
-}
-
-// FUNCIONANDO!
-async function buscarPorNome(nome){
-    const alunoBuscadoPorNome = await alunoPersistencia.buscarPorNome(nome);
-    if(!alunoBuscadoPorNome) {
-        throw { id: 404, mensagem: `Nenhum Aluno com Nome ${nome} encontrado!` };
-    }else{
-        return alunoBuscadoPorNome;
-    }
-}
-// FUNCIONANDO!
-async function buscarPorTelefone(telefone) {
-    const alunoBuscadoPortelefone = await alunoPersistencia.buscarPortelefone(telefone)
-    if(alunoBuscadoPortelefone){
-        return alunoBuscadoPortelefone;
-    }
-    else{
-        throw { id: 404, mensagem: `aluno com telefone ${telefone} não encontrado!` };
-    }
-}
-
-// FUNCIONANDO!
-async function buscarPorCpf(cpf) {
-    const alunoBuscadoPorCpf = await alunoPersistencia.buscarPorCpf(cpf)
-    if(alunoBuscadoPorCpf){
-        return alunoBuscadoPorCpf;
-    }
-    else{
-        throw { id: 404, mensagem: `aluno com CPF ${cpf} não encontrado!` };
-    }
-}
-
-// FUNCIONANDO!
-async function buscarPorEmail(email) {
-    const alunoBuscadoPorEmail = await alunoPersistencia.buscarPorEmail(email)
-    if(alunoBuscadoPorEmail){
-        return alunoBuscadoPorEmail;
-    }
-    else{
-        throw { id: 404, mensagem: `aluno com Email ${email} não encontrado!` };
-    }
 }
 
 
-// FUNCIONANDO!
-async function atualizar(id, pessoa){
-    if(validarAluno(pessoa)) {
-        const alunoAtualizar = await buscarPorId(id)
-        if(alunoAtualizar) {
-            return await alunoPersistencia.atualizar(id, pessoa);
+// Read
+async function buscarAluno() {
+    try {
+        const aluno = await persistencia.buscarAluno()
+
+        if (aluno.length == 0) {
+            const erro = new Error()
+            erro.message = "Não há usuários cadastrados."
+            erro.status = 404
+            throw erro
         }
-        else{
-            throw { id: 404, mensagem: "aluno não encontrado!" }
+
+        return aluno
+    } catch (error) { throw error }
+}
+
+async function buscarAlunoPorNome(nome) {
+    try {
+        const nomeAluno = await persistencia.buscarAlunoPorNome(nome)
+
+        if (!nomeAluno) {
+            const erro = new Error()
+            erro.message = "Nome não encontrado."
+            erro.status = 404
+            throw erro
         }
-    }
-    else {
-        throw {id: 400, mensagem: "Parâmetro(s) inválido(s)!" };
+
+        return nomeAluno
+    } catch { throw error }
+}
+
+async function buscarAlunoPorEmail(email) {
+    try {
+        const emailaluno = await persistencia.buscarAlunoPorEmail(email)
+
+        if (!emailAluno) {
+            const erro = new Error()
+            erro.message = "Nome não encontrado."
+            erro.status = 404
+            throw erro
+        }
+
+        return emailAluno
+    } catch { throw error }
+}
+
+async function buscarAlunoPorId(id) {
+    try {
+        const idAluno = await persistencia.buscarAlunoPorId(id)
+
+        if (!idAluno) {
+            const erro = new Error()
+            erro.message = "Id não encontrado."
+            erro.status = 404
+            throw erro
+        }
+
+        return idAluno
+    } catch { throw error }
+}
+
+// Update
+async function atualizarAluno(id, alunos) {
+    if (alunos && alunos.nome && alunos.email) {
+        const alunoAtualizado = await persistencia.atualizarAluno(id, alunos)
+
+        if (!alunoAtualizado) {
+            let erro = new Error()
+            erro.message = "Usuário não encontrado."
+            erro.status = 404
+            throw erro
+        }
+
+        return alunoAtualizado
+    } else {
+        let erro = new Error()
+        erro.message = "Todos os campos são obrigatórios."
+        erro.status = 400
+        throw erro
     }
 }
 
-// FUNCIONANDO!
-async function deletar(id){
-    const alunoDeletar = await buscarPorId(id)
-    if(alunoDeletar){
-        return await alunoPersistencia.deletar(id);
-    }
-    else{
-        throw { id: 404, mensagem: `Aluno com Id ${id} não encontrado!` }
-    }
+// Update - senha
+// async function autalizarSenha(id, senha) {
+//     if (senha) {
+//         const senhaAtualizada = await persistencia.autalizarSenha(id, senha)
+
+//         if(!senhaAtualizada) {
+//             let erro = new Error()
+//             erro.message = "Usuário não encontrado."
+//             erro.status = 404
+//             throw erro
+//         }
+
+//         return senhaAtualizada
+//     } else {
+//         let erro = new Error()
+//         erro.message = "Campo obrigatório."
+//         erro.status = 400
+//         throw erro
+//     }
+// }
+
+// Delete
+async function deletarAluno(id) {
+    try {
+        const clienteDeletado =  await persistencia.deletarAluno(id)
+
+        if (!clienteDeletado) {
+            const erro = new Error()
+            erro.message = "Aluno não encontrado"
+            erro.status = 404
+            throw erro
+        }
+
+        return clienteDeletado
+    } catch (error) { throw error }
 }
 
+// PAGAMENTO
+
+// async function addPagamento(idAluno, pagamento) {
+//     if (pagamento && idAluno && pagamento.dt_pagamento && pagamento.status && pagamento.valor) {
+//         try {
+//             const pagamentos = await persistencia.addPagamento(idAluno, pagamento)
+//             console.log("Pagamento adicionado com sucesso:", pagamentos)
+//             return pagamentos
+//         } catch (error) { 
+//             console.error("Erro ao adicionar pagamento:", error) 
+//             throw error 
+//         }
+//     } else {
+//         const erro = new Error()
+//         erro.message = "Todos os campos são obrigatórios."
+//         erro.status = 400
+//         throw erro
+    // }
+// }
 
 module.exports = {
-    inserir, buscarPorTelefone, listar, deletar, buscarPorId, atualizar, buscarPorNome, buscarPorCpf, buscarPorEmail
+    addAluno,
+    buscarAluno,
+    buscarAlunoPorNome,
+    buscarAlunoPorEmail,
+    buscarAlunoPorId,
+    atualizarAluno,
+   
+    deletarAluno
+    
 }

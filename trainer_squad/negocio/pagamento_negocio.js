@@ -1,38 +1,35 @@
-const pagamentoPersistencia = require('../persistencia/pagamento_persistencia')
-const alunoPersistencia = require('../persistencia/aluno_persistencia')
-const { validarPagamento } = require('./pagamento_validacao')
+const persistencia = require('../persistencia/pagamento_persistencia')
+// const { validarAluno } = require('./aluno_validacao')
 
 
-// FUNCIONANDO!
-async function listar() {
-    const pagamentoListados = await pagamentoPersistencia.listar();
-    if (pagamentoListados) {
-        return pagamentoListados;
-    }    
-    else {
-        throw { id: 500, mensagem: "Lista de pagamentos vazia!" };
+
+// Iniciando CRUD
+
+// Create
+
+// PAGAMENTO
+
+async function addPagamento(idAluno, pagamento) {
+    if (pagamento && idAluno && pagamento.dt_pagamento && pagamento.status && pagamento.valor) {
+        try {
+            const pagamentos = await persistencia.addPagamento(idAluno, pagamento)
+            console.log("Pagamento adicionado com sucesso:", pagamentos)
+            return pagamentos
+        } catch (error) { 
+            console.error("Erro ao adicionar pagamento:", error) 
+            throw error 
+        }
+    } else {
+        const erro = new Error()
+        erro.message = "Todos os campos são obrigatórios."
+        erro.status = 400
+        throw erro
     }
 }
-// FUNCIONANDO!!!
-// async function inserir(pagamento) {
-//     if(pagamento && pagamento.id_aluno && pagamento.dt_pagamento && pagamento.status && pagamento.valor) {
-//         const alunoBuscadoPorId = await alunoPersistencia.buscarPorId(id);
-//         if(!alunoBuscadoPorId) {
-//             const pagamentoInserido = await pagamentoPersistencia.inserir(pagamento);
-//             return pagamentoInserido;
-//         }else{throw { id: 402, mensagem: "Aluno já cadastrado!"}}
-        
-//     }else {throw { id: 400, mensagem: "Faltam parâmetros no pagamento!"};}
-// }
-async function inserir(pagamento) {
-        if(pagamento && pagamento.id_aluno && pagamento.dt_pagamento && pagamento.status && pagamento.valor) {
-            {const pagamentoInserido = await pagamentoPersistencia.inserir(pagamento);
-                return pagamentoInserido;
-            }
-            
-        }else {throw { id: 400, mensagem: "Faltam parâmetros no pagamento!"};}
-    }
 
 module.exports = {
-    listar, inserir,
+    
+    addPagamento
+   
+    
 }
