@@ -5,12 +5,11 @@ const router = express.Router()
 
 
 router.post('/pagamento/:id', controller.addPagamento)
-// router.post('/aluno/:id', controller.addAluno)
-// router.get('/users', controller.buscarAluno)
-// router.get('/nome/:nome', controller.buscarAlunoPorNome)
-// router.get('/email/:email', controller.buscarAlunoPorEmail)
-// router.get('/:id', controller.buscarAlunoPorId)
-// router.put('/:id', controller.atualizarAluno)
+
+router.get('/users', controller.buscarPagamento)
+
+// router.get('/:id', controller.buscarPagamentoPorId)
+// router.put('/:id', controller.atualizarPagamento)
 
 // router.delete('/:id', controller.deletarAluno)
 

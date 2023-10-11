@@ -27,9 +27,28 @@ async function addPagamento(idAluno, pagamento) {
     }
 }
 
+
+async function buscarPagamento() {
+    try {
+        const pagamento = await persistencia.buscarPagamento()
+
+        if (pagamento.length == 0) {
+            const erro = new Error()
+            erro.message = "Não há pagamentos cadastrados."
+            erro.status = 404
+            throw erro
+        }
+
+        return pagamento
+    } catch (error) { throw error }
+}
+
+
+
 module.exports = {
     
-    addPagamento
+    addPagamento,
+    buscarPagamento
    
     
 }

@@ -58,7 +58,7 @@ async function buscarAlunoPorNome(nome) {
 
 async function buscarAlunoPorEmail(email) {
     try {
-        const emailaluno = await persistencia.buscarAlunoPorEmail(email)
+        const emailAluno = await persistencia.buscarAlunoPorEmail(email)
 
         if (!emailAluno) {
             const erro = new Error()
@@ -107,26 +107,6 @@ async function atualizarAluno(id, alunos) {
     }
 }
 
-// Update - senha
-// async function autalizarSenha(id, senha) {
-//     if (senha) {
-//         const senhaAtualizada = await persistencia.autalizarSenha(id, senha)
-
-//         if(!senhaAtualizada) {
-//             let erro = new Error()
-//             erro.message = "Usuário não encontrado."
-//             erro.status = 404
-//             throw erro
-//         }
-
-//         return senhaAtualizada
-//     } else {
-//         let erro = new Error()
-//         erro.message = "Campo obrigatório."
-//         erro.status = 400
-//         throw erro
-//     }
-// }
 
 // Delete
 async function deletarAluno(id) {

@@ -26,9 +26,25 @@ async function addPagamento(req, res) {
     }
 }
 
+async function buscarPagamento(req, res) {
+    const pagamento = req.body
+
+    try {
+        const pagamentos = await negocio.buscarPagamento(pagamento)
+        res.status(200).json(pagamentos)
+    } catch (error) {
+        if (error.status) {
+            res.status(error.status).json(error)
+        } else {
+            res.status(500).json({message: "Erro interno!"})
+        }
+    }
+}
+
 module.exports = {
     
-    addPagamento
+    addPagamento,
+    buscarPagamento
  
    
 }

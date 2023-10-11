@@ -24,8 +24,25 @@ async function addPagamento(idAluno, pagamento) {
     } catch (error) { throw error }
 }
 
+// Read
+async function buscarPagamento() {
+    const client = new Client(conexao)
+    client.connect()
+
+    try {
+        const sql = `SELECT * FROM pagamento`
+        const Pagamento = await client.query(sql)
+
+        client.end()
+        return Pagamento.rows
+    } catch (error) { throw error }
+}
+
+
 module.exports = {
   
-    addPagamento
+    addPagamento,
+    buscarPagamento
+
 }
 
