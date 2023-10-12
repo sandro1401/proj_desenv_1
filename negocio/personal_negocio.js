@@ -110,27 +110,6 @@ async function atualizarUsuario(id, usuarios) {
     }
 }
 
-// Update - senha
-async function autalizarSenha(id, senha) {
-    if (senha) {
-        const senhaAtualizada = await persistencia.autalizarSenha(id, senha)
-
-        if(!senhaAtualizada) {
-            let erro = new Error()
-            erro.message = "Usuário não encontrado."
-            erro.status = 404
-            throw erro
-        }
-
-        return senhaAtualizada
-    } else {
-        let erro = new Error()
-        erro.message = "Campo obrigatório."
-        erro.status = 400
-        throw erro
-    }
-}
-
 // Delete
 async function deletarUsuario(id) {
     try {
@@ -147,44 +126,6 @@ async function deletarUsuario(id) {
     } catch (error) { throw error }
 }
 
-// TREINOS
-
-async function addTreino(idAluno, treino) {
-    if (treino && treino.carga && treino.serie && treino.exercicio && treino.tipo && treino.repeticao && idAluno) {
-        try {
-            const treinos = await persistencia.addTreino(idAluno, treino)
-            console.log("Treino adicionado com sucesso:", treinos)
-            return treinos
-        } catch (error) { 
-            throw error 
-        }
-    } else {
-        const erro = new Error()
-        erro.message = "Todos os campos são obrigatórios."
-        erro.status = 400
-        throw erro
-    }
-}
-
-// ALUNOS E PAGAMENTOS
-
-async function addAluno(idUsuario, aluno) {
-    console.log("Conteúdo do objeto aluno recebido:", aluno)
-    if (aluno && aluno.sexo && aluno.nome && aluno.cpf && aluno.dt_nascimento && aluno.telefone && aluno.email && aluno.status
-        && aluno.plano && idUsuario) {
-            try {
-                const alunoAdd = await persistencia.addAluno(idUsuario, aluno)
-                return alunoAdd
-            } catch (error) {
-                throw error 
-            }
-        } else {
-            const erro = new Error()
-            erro.message = "Todos os campos são obrigatórios."
-            erro.status = 400
-            throw erro
-        }
-}
 
 module.exports = {
     addUsuario,
@@ -193,8 +134,5 @@ module.exports = {
     buscarUsuarioPorEmail,
     buscarUsuarioPorId,
     atualizarUsuario,
-    autalizarSenha,
-    deletarUsuario,
-    addTreino,
-    addAluno
+    deletarUsuario
 }

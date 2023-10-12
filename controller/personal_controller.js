@@ -96,23 +96,6 @@ async function atualizarUsuario(req, res) {
     }
 }
 
-// Update - senha
-async function autalizarSenha(req, res) {
-    const id = req.params.id
-    const senha = req.body
-
-    try {
-        const senhaAtualizada = await negocio.autalizarSenha(id, senha)
-        res.status(200).json(senhaAtualizada)
-    } catch (error) {
-        if (error.status) {
-            res.status(error.status).json(error)
-        } else {
-            res.status(500).json({message: "Erro interno!"})
-        }
-    }
-}
-
 // Delete
 async function deletarUsuario(req, res) {
     const id = req.params.id
@@ -129,43 +112,6 @@ async function deletarUsuario(req, res) {
     }
 }
 
-// TREINOS
-
-async function addTreino(req, res) {
-    const idAluno = req.params.id
-    const treino = req.body
-
-    try {
-        const treinos = await negocio.addTreino(idAluno, treino)
-        res.status(201).json(treinos)
-    } catch (error) {
-        if (error.status) {
-            res.status(error.status).json(error)
-        } else {
-            res.status(500).json({message: "Erro interno!"})
-        }
-    }
-}
-
-// ALUNOS E PAGAMENTOS
-
-async function addAluno(req, res) {
-    const idUsuario = req.params.id
-    const aluno = req.body
-
-    try {
-        const alunoAdd = await negocio.addAluno(idUsuario, aluno)
-        res.status(201).json(alunoAdd)
-    } catch (error) {
-        console.error("Erro ao adicionar treino:", error)
-        if (error.status) {
-            res.status(error.status).json(error)
-        } else {
-            res.status(500).json({message: "Erro interno!"})
-        }
-    }
-}
-
 module.exports = {
     addUsuario,
     buscarUsuario,
@@ -173,8 +119,5 @@ module.exports = {
     buscarUsuarioPorEmail,
     buscarUsuarioPorId,
     atualizarUsuario,
-    autalizarSenha,
-    deletarUsuario,
-    addTreino,
-    addAluno
+    deletarUsuario
 }
