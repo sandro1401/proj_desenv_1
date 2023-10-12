@@ -15,7 +15,8 @@ CREATE TABLE aluno
 );
 
 INSERT INTO aluno(sexo, nome, cpf, dt_nascimento, telefone, email, status, plano, idUsuario) 
-VALUES('F', 'Aluno 1', '11122233344', '09/10/2000', '91111-2222', 'aluno1@email.com', 'Ativo', 'Mensal', (SELECT id FROM usuario WHERE id = 1) )
+VALUES('F', 'Aluno 1', '11122233344', '09/10/2000', '91111-2222', 'aluno1@email.com', 'Ativo', 'Mensal', 
+	   (SELECT id FROM usuario WHERE id = 1) ) RETURNING id
 
 CREATE TABLE pagamento 
 ( id serial PRIMARY KEY,
@@ -83,7 +84,8 @@ VALUES('aaa', 10, 4, 'Desenvolvimento', 'D', 15, (SELECT id FROM aluno WHERE id 
 
 ALTER TABLE aluno ADD FOREIGN KEY(idUsuario) REFERENCES usuario (id)
 ALTER TABLE aluno ADD FOREIGN KEY(idPagamento) REFERENCES pagamento (id)
-ALTER TABLE pagamento DROP COLUMN id_aluno
+ALTER TABLE pagamento ADD COLUMN id_aluno INT
+ALTER TABLE pagamento ADD FOREIGN KEY (id_aluno) REFERENCES aluno (id)
 ALTER TABLE aluno DROP COLUMN idPagamento
 
 ALTER TABLE aluno 
