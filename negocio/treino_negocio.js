@@ -16,6 +16,54 @@ async function addTreino(idAluno, treino) {
     }
 }
 
+async function buscarTreino() {
+    try {
+        const treino = await persistencia.buscarTreino()
+        
+        if (treino.length == 0) {
+            const erro = new Error()
+            erro.message = "Não há usuários cadastrados."
+            erro.status = 404
+            throw erro
+        }
+
+        return treino
+    } catch (error) { throw error }
+}
+
+async function buscarTreinoAluno(idAluno) {
+    try {
+        const treinoAluno = await persistencia.buscarTreinoAluno(idAluno)
+
+        if (!treinoAluno) {
+            const erro = new Error()
+            erro.message = "Aluno não encontrado."
+            erro.status = 404
+            throw erro
+        }
+
+        return treinoAluno
+    } catch (error) { throw error }
+}
+
+async function buscarTreinoTipo(tipo) {
+    try {
+        const tipos = await persistencia.buscarTreinoTipo(tipo)
+
+        if (!tipos) {
+            const erro = new Error()
+            erro.message = "Tipo de treino não encontrado."
+            erro.status = 404
+            throw erro
+        }
+
+        return tipos
+    } catch (error) { throw error }
+}
+
 module.exports = {
-    addTreino
+    addTreino,
+    buscarTreino,
+    buscarTreinoAluno,
+    buscarTreinoTipo
 }

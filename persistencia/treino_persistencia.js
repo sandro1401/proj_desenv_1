@@ -17,6 +17,50 @@ async function addTreino(idAluno, treino) {
     } catch (error) { throw error }
 }
 
+async function buscarTreino() {
+    const client = new Client(conexao)
+    client.connect()
+
+    try {
+        const sql = `SELECT * FROM treino ORDER BY id`
+        const treino = await client.query(sql)
+
+        await client.end()
+        return treino.rows
+    } catch (error) { throw error }
+}
+
+async function buscarTreinoAluno(idAluno) {
+    const client = new Client(conexao)
+    client.connect()
+
+    try {
+        const sql = `SELECT aluno.nome, treino.* FROM treino INNER JOIN aluno ON aluno.id = treino.idAluno WHERE treino.idAluno = $1`
+        const values = [idAluno]
+        const treinoAluno = await client.query(sql, values)
+
+        await client.end()
+        return treinoAluno.rows[0]
+    } catch (error) { throw error }
+}
+
+async function buscarTreinoTipo(tipo) {
+    const client = new Client(conexao)
+    client.connect()
+
+    try {
+        const sql = `SELECT * FROM treino WHERE tipo = $1`
+        const values = [tipo]
+        const tipos = await client.query(sql, values)
+
+        await client.end()
+        return tipos.rows
+    } catch (error) { throw error }
+}
+
 module.exports = {
-    addTreino
+    addTreino,
+    buscarTreino,
+    buscarTreinoAluno,
+    buscarTreinoTipo
 }
