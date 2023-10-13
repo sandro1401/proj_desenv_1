@@ -44,11 +44,67 @@ async function buscarPagamento() {
 }
 
 
+async function buscarPagamentoPorId(id) {
+    try {
+        const idPagamento = await persistencia.buscarPagamentoPorId(id)
+
+        if (!idPagamento) {
+            const erro = new Error()
+            erro.message = "Id não encontrado."
+            erro.status = 404
+            throw erro
+        }
+
+        return idPagamento
+    } catch { throw error }
+}
+
+// Update
+async function atualizarPagamento(id, pagamentos) {
+    if (pagamentos && pagamentos.idAluno && pagamentos.dt_pagamento && pagamentos.status && pagamentos.valor) {
+        const pagamentoAtualizado = await persistencia.atualizarAluno(id, pagamentos)
+
+        if (!pagamentoAtualizado) {
+            let erro = new Error()
+            erro.message = "Pagamento não encontrado."
+            erro.status = 404
+            throw erro
+        }
+
+        return pagamentoAtualizado
+    } else {
+        let erro = new Error()
+        erro.message = "Todos os campos são obrigatórios."
+        erro.status = 400
+        throw erro
+    }
+}
+
+
+// Delete
+async function deletarPagamento(id) {
+    try {
+        const pagamentoDeletado =  await persistencia.deletarPagamento(id)
+
+        if (!pagamentoDeletado) {
+            const erro = new Error()
+            erro.message = "Pagamento não encontrado"
+            erro.status = 404
+            throw erro
+        }
+
+        return pagamentoDeletado
+    } catch (error) { throw error }
+}
+
 
 module.exports = {
     
     addPagamento,
-    buscarPagamento
+    buscarPagamento,
+    buscarPagamentoPorId,
+    atualizarPagamento,
+    deletarPagamento
    
     
 }

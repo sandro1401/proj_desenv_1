@@ -32,7 +32,7 @@ async function buscarAluno() {
 
         if (aluno.length == 0) {
             const erro = new Error()
-            erro.message = "Não há usuários cadastrados."
+            erro.message = "Não há Alunos cadastrados."
             erro.status = 404
             throw erro
         }
@@ -93,7 +93,7 @@ async function atualizarAluno(id, alunos) {
 
         if (!alunoAtualizado) {
             let erro = new Error()
-            erro.message = "Usuário não encontrado."
+            erro.message = "Aluno não encontrado."
             erro.status = 404
             throw erro
         }
@@ -124,25 +124,7 @@ async function deletarAluno(id) {
     } catch (error) { throw error }
 }
 
-// PAGAMENTO
 
-// async function addPagamento(idAluno, pagamento) {
-//     if (pagamento && idAluno && pagamento.dt_pagamento && pagamento.status && pagamento.valor) {
-//         try {
-//             const pagamentos = await persistencia.addPagamento(idAluno, pagamento)
-//             console.log("Pagamento adicionado com sucesso:", pagamentos)
-//             return pagamentos
-//         } catch (error) { 
-//             console.error("Erro ao adicionar pagamento:", error) 
-//             throw error 
-//         }
-//     } else {
-//         const erro = new Error()
-//         erro.message = "Todos os campos são obrigatórios."
-//         erro.status = 400
-//         throw erro
-    // }
-// }
 
 module.exports = {
     addAluno,
@@ -151,7 +133,6 @@ module.exports = {
     buscarAlunoPorEmail,
     buscarAlunoPorId,
     atualizarAluno,
-   
     deletarAluno
     
 }

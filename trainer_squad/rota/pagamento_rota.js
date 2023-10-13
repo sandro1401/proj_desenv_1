@@ -6,11 +6,11 @@ const router = express.Router()
 
 router.post('/pagamento/:id', controller.addPagamento)
 
-router.get('/users', controller.buscarPagamento)
+router.get('/pagamentos', controller.buscarPagamento)
 
-// router.get('/:id', controller.buscarPagamentoPorId)
-// router.put('/:id', controller.atualizarPagamento)
+router.get('/:id', controller.buscarPagamentoPorId)
+router.put('/:id', controller.atualizarPagamento)
 
-// router.delete('/:id', controller.deletarAluno)
+router.delete('/:id', controller.deletarPagamento)
 
 module.exports = router

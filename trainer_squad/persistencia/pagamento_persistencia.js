@@ -38,11 +38,59 @@ async function buscarPagamento() {
     } catch (error) { throw error }
 }
 
+async function buscarPagamentoPorId(id) {
+    const client = new Client(conexao)
+    client.connect()
+
+    try {
+        const sql = `SELECT * FROM pagamento WHERE id = $1`
+        const values = [id]
+        const idPagamento = await client.query(sql, values)
+
+        client.end()
+        return idPagamento.rows[0]
+    } catch (error) { throw error }
+}
+
+// Update
+async function atualizarPagamento(id, pagamentos) {
+    const client = new Client(conexao)
+    client.connect()
+
+    try {
+        const sql = `UPDATE pagamento SET id_aluno = $1, dt_pagamento = $2, status  = $3, valor = $4 WHERE id = $5 RETURNING *`
+        const values = [pagamentos.id_aluno, pagamentos.dt_pagamento, pagamentos.status, pagamentos.valor, id ]
+        const pagamentoAtualizado = await client.query(sql, values)
+
+        client.end()
+        return pagamentoAtualizado.rows[0]
+    } catch (error) { throw error }
+}
+
+// Delete
+async function deletarPagamento(id) {
+    const client = new Client(conexao)
+    client.connect()
+
+    try {
+        const sql = `DELETE FROM pagamento WHERE id = $1 RETURNING *`
+        const values = [id]
+        const pagamentoDeletado = await client.query(sql, values)
+
+        client.end()
+        return pagamentoDeletado.rows[0]
+    } catch (error) { throw error }
+}
+
+
 
 module.exports = {
   
     addPagamento,
-    buscarPagamento
+    buscarPagamento,
+    atualizarPagamento,
+    buscarPagamentoPorId,
+    deletarPagamento
 
 }
 

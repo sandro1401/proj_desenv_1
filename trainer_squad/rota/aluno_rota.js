@@ -4,9 +4,8 @@ const controller = require('../controller/aluno_controller')
 const router = express.Router()
 
 
-// router.post('/:id', controller.addPagamento)
 router.post('/aluno/:id', controller.addAluno)
-router.get('/users', controller.buscarAluno)
+router.get('/alunos', controller.buscarAluno) //listar
 router.get('/nome/:nome', controller.buscarAlunoPorNome)
 router.get('/email/:email', controller.buscarAlunoPorEmail)
 router.get('/:id', controller.buscarAlunoPorId)

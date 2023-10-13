@@ -131,26 +131,6 @@ async function deletarAluno(req, res) {
     }
 }
 
-// PAGAMENTO
-
-// async function addPagamento(req, res) {
-//     const idAluno = req.params.id
-//     const pagamento = req.body
-
-//     try {
-//         const pagamentos = await negocio.addPagamento(idAluno, pagamento)
-//         console.log("Dados do pagamento:", pagamento)
-//         res.status(201).json(pagamentos)
-//     } catch (error) {
-//         console.error("Erro ao adicionar pagamento:", error)
-//         if (error.status) {
-//             res.status(error.status).json(error)
-//         } else {
-//             res.status(500).json({message: "Erro interno!"})
-//         }
-//     }
-// }
-
 module.exports = {
     addAluno,
     buscarAluno,
@@ -158,7 +138,6 @@ module.exports = {
     buscarAlunoPorEmail,
     buscarAlunoPorId,
     atualizarAluno,
-    // addPagamento,
     deletarAluno
    
 }
