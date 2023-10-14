@@ -58,9 +58,45 @@ async function buscarTreinoTipo(tipo) {
     } catch (error) { throw error }
 }
 
+async function atualizarTreino(id, treino) {
+    const client = new Client(conexao)
+    client.connect()
+
+    try {
+        const sql = `UPDATE treino SET obs      = $1,
+                                      carga     = $2,
+                                      serie     = $3,
+                                      exercicio = $4,
+                                      tipo      = $5,
+                                      repeticao = $6
+                            WHERE id = $7 RETURNING *`
+        const values = [treino.obs, treino.carga, treino.serie, treino.exercicio, treino.tipo, treino.repeticao, id]
+        const treinoAtualizado = await client.query(sql, values)
+
+        await client.end()
+        return treinoAtualizado.rows[0]
+    } catch (error) { throw error }
+}
+
+async function deletarTreino(id) {
+    const client = new Client(conexao)
+    client.connect()
+
+    try {
+        const sql = `DELETE FROM treino WHERE id = $1 RETURNING *`
+        const values = [id]
+        const treinoDeletado = await client.query(sql, values)
+
+        await client.end()
+        return treinoDeletado.rows[0]
+    } catch (error) { throw error }
+}
+
 module.exports = {
     addTreino,
     buscarTreino,
     buscarTreinoAluno,
-    buscarTreinoTipo
+    buscarTreinoTipo,
+    atualizarTreino,
+    deletarTreino
 }

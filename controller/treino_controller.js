@@ -61,9 +61,44 @@ async function buscarTreinoTipo(req, res) {
     }
 }
 
+async function atualizarTreino(req, res) {
+    const id = req.params.id
+    const treino = req.body
+
+    try {
+        const treinoAtualizado = await negocio.atualizarTreino(id, treino)
+        res.status(200).json(treinoAtualizado)
+    } catch (error) {
+        if (error.status) {
+            res.status(error.status).json(error)
+        } else {
+            console.log(error)
+            res.status(500).json({message: "Erro interno!"})
+        }
+    }
+}
+
+async function deletarTreino(req, res) {
+    const id = req.params.id
+
+    try {
+        const treinoDeletado = await negocio.deletarTreino(id)
+        res.status(200).json(treinoDeletado)
+    } catch (error) {
+        if (error.status) {
+            res.status(error.status).json(error)
+        } else {
+            console.log(error)
+            res.status(500).json({message: "Erro interno!"})
+        }
+    }
+}
+
 module.exports = {
     addTreino,
     buscarTreino,
     buscarTreinoAluno,
-    buscarTreinoTipo
+    buscarTreinoTipo,
+    atualizarTreino,
+    deletarTreino
 }

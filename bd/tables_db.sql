@@ -104,3 +104,9 @@ SELECT * FROM aluno
 SELECT * FROM avaliacao
 SELECT * FROM pagamento
 SELECT * FROM treino
+
+SELECT * FROM treino WHERE tipo = 'A'
+
+SELECT aluno.nome, treino.* FROM treino 
+INNER JOIN aluno ON aluno.id = idAluno
+WHERE idAluno = 5
