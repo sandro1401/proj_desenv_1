@@ -5,9 +5,7 @@ async function addTreino(idAluno, treino) {
         try {
             const treinos = await persistencia.addTreino(idAluno, treino)
             return treinos
-        } catch (error) { 
-            throw error 
-        }
+        } catch (error) { throw error }
     } else {
         const erro = new Error()
         erro.message = "Todos os campos são obrigatórios."
@@ -22,7 +20,7 @@ async function buscarTreino() {
         
         if (treino.length == 0) {
             const erro = new Error()
-            erro.message = "Não há usuários cadastrados."
+            erro.message = "Não há treinos cadastrados."
             erro.status = 404
             throw erro
         }
@@ -37,7 +35,7 @@ async function buscarTreinoAluno(idAluno) {
 
         if (!treinoAluno) {
             const erro = new Error()
-            erro.message = "Aluno não encontrado."
+            erro.message = "Treino não encontrado."
             erro.status = 404
             throw erro
         }

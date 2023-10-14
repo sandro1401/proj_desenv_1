@@ -59,6 +59,14 @@ CREATE TABLE avaliacao (
 	idAluno INT
 )
 
+INSERT INTO avaliacao(qtd, peso, altura, nome, dt_aval, sexo, idade, circ_punho, circ_abd,
+					  circ_gluteo, porc_gordura, massa_gordura, massa_magra, porc_massa_musc,
+                      massa_muscu, ingestao_calorica, taxa_metabolica, diferenca, idAluno)
+VALUES((SELECT count(idAluno) + 1 FROM avaliacao WHERE idAluno = 2), 68.6, 1.65, 'Aluno 1', '13/10/2023',
+	  1, 21, 17.1, 95, 100, 20.8, 19.0, 72.5, 31.2, 28.5, 2000, 2079, 78.9, 2)
+	  
+	  DELETE FROM avaliacao
+
 CREATE TABLE treino (
 	id serial PRIMARY KEY,
 	obs varchar(255),
@@ -97,13 +105,15 @@ ALTER TABLE pagamento ADD FOREIGN KEY(id_aluno) REFERENCES aluno (id)
 
 ALTER TABLE treino ADD FOREIGN KEY(idAluno) REFERENCES aluno (id)
 
+ALTER TABLE avaliacao ADD COLUMN qtd INT
+
 SELECT * FROM treino WHERE tipo = 'A'
 
-SELECT * FROM usuario
-SELECT * FROM aluno
-SELECT * FROM avaliacao
-SELECT * FROM pagamento
-SELECT * FROM treino
+SELECT * FROM usuario ORDER BY id
+SELECT * FROM aluno ORDER BY id
+SELECT * FROM avaliacao ORDER BY id
+SELECT * FROM pagamento ORDER BY id
+SELECT * FROM treino ORDER BY id
 
 SELECT * FROM treino WHERE tipo = 'A'
 

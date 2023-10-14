@@ -40,7 +40,7 @@ async function buscarTreinoAluno(idAluno) {
         const treinoAluno = await client.query(sql, values)
 
         await client.end()
-        return treinoAluno.rows[0]
+        return treinoAluno.rows
     } catch (error) { throw error }
 }
 
