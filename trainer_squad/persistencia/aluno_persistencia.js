@@ -1,5 +1,6 @@
 const { Client } = require('pg')
 const { conexao } = require('./conexao')
+const { query } = require('express')
 
 // Iniciando CRUD
 
@@ -89,6 +90,21 @@ async function buscarAlunoPorId(id) {
     } catch (error) { throw error }
 }
 
+async function buscarAlunoPorCpf(cpf) {
+    const client = new Client(conexao)
+    client.connect()
+
+    try {
+        const sql = `SELECT * FROM aluno WHERE cpf = $1`
+        const values = [cpf]
+        const cpfAluno = await client.query(sql, values)
+
+        client.end()
+        return cpfAluno.rows[0]
+    } catch (error) { throw error }
+}
+
+
 // Update
 async function atualizarAluno(id, alunos) {
     const client = new Client(conexao)
@@ -107,19 +123,43 @@ async function atualizarAluno(id, alunos) {
 
 
 // Delete
+// async function deletarAluno(id) {
+//     const client = new Client(conexao)
+//     client.connect()
+
+//     try {
+//         const sql = `DELETE FROM aluno WHERE id = $1 RETURNING *`
+//         const values = [id]
+//         const alunoDeletado = await client.query(sql, values)
+
+//         client.end()
+//         return alunoDeletado.rows[0]
+//     } catch (error) { throw error }
+// }
+
 async function deletarAluno(id) {
+    let resAluno
     const client = new Client(conexao)
     client.connect()
 
     try {
+        await client.query(('BEGIN'))
         const sql = `DELETE FROM aluno WHERE id = $1 RETURNING *`
         const values = [id]
-        const clienteDeletado = await client.query(sql, values)
+        resAluno = await client.query(sql, values)
 
-        client.end()
-        return clienteDeletado.rows[0]
-    } catch (error) { throw error }
+        const sqlPag = 'DELETE FROM pagamento where id_aluno = $1 RETURNING *'
+        const valuesPag = [id]
+        const pag = await client.query(sqlPag, valuesPag)
+        return {aluno: resAluno.rows[0], pagamento: pag.rows[0]}
+    } catch (error) {
+        await client.query('ROLLBACK'); 
+        
+        throw error; }finally{
+            client.end()
+        }
 }
+
 
 
 module.exports = {
@@ -128,6 +168,7 @@ module.exports = {
     buscarAlunoPorNome,
     buscarAlunoPorEmail,
     buscarAlunoPorId,
+    buscarAlunoPorCpf,
     atualizarAluno,
     
     deletarAluno,
