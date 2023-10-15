@@ -138,24 +138,27 @@ async function atualizarAluno(id, alunos) {
 // }
 
 async function deletarAluno(id) {
-    let resAluno
+    let AlunoDeletado
     const client = new Client(conexao)
     client.connect()
 
     try {
         await client.query(('BEGIN'))
-        const sql = `DELETE FROM aluno WHERE id = $1 RETURNING *`
-        const values = [id]
-        resAluno = await client.query(sql, values)
-
         const sqlPag = 'DELETE FROM pagamento where id_aluno = $1 RETURNING *'
         const valuesPag = [id]
         const pag = await client.query(sqlPag, valuesPag)
-        return {aluno: resAluno.rows[0], pagamento: pag.rows[0]}
+       
+        const sql = `DELETE FROM aluno WHERE id = $1 RETURNING *`
+        const values = [id]
+        AlunoDeletado = await client.query(sql, values)
+        await client.query('COMMIT')
+        return {aluno: AlunoDeletado.rows[0], pagamento: pag.rows[0]}
     } catch (error) {
+       
         await client.query('ROLLBACK'); 
         
-        throw error; }finally{
+        throw error;
+    }finally{
             client.end()
         }
 }
