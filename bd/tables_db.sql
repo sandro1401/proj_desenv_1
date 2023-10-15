@@ -120,3 +120,6 @@ SELECT * FROM treino WHERE tipo = 'A'
 SELECT aluno.nome, treino.* FROM treino 
 INNER JOIN aluno ON aluno.id = idAluno
 WHERE idAluno = 5
+
+SELECT aluno.nome, avaliacao.* FROM avaliacao INNER JOIN aluno ON aluno.id = avaliacao.idAluno
+                     WHERE avaliacao.idAluno = 50

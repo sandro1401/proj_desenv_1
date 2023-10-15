@@ -34,7 +34,7 @@ async function buscarAvaliacoes() {
     } catch (error) { throw error }
 }
 
-async function buscarAvaliacoesAluno (idAluno) {
+async function buscarAvaliacoesAluno(idAluno) {
     const client = new Client(conexao)
     client.connect()
 
@@ -48,8 +48,57 @@ async function buscarAvaliacoesAluno (idAluno) {
     } catch (error) { throw error }
 }
 
+async function atualizarAvaliacao(id, aval) {
+    const client = new Client(conexao)
+    client.connect()
+
+    try {
+        const sql = `UPDATE avaliacao SET peso              = $1,
+                                          altura            = $2,
+                                          nome              = $3,
+                                          dt_aval           = $4,
+                                          sexo              = $5,
+                                          idade             = $6,
+                                          circ_punho        = $7,
+                                          circ_abd          = $8,
+                                          circ_gluteo       = $9,
+                                          porc_gordura      = $10,
+                                          massa_gordura     = $11,
+                                          massa_magra       = $12,
+                                          porc_massa_musc   = $13,
+                                          massa_muscu       = $14,
+                                          ingestao_calorica = $15,
+                                          taxa_metabolica   = $16,
+                                          diferenca         = $17
+                                WHERE id = $18 RETURNING *`
+        const values = [aval.peso, aval.altura, aval.nome, aval.dt_aval, aval.sexo, aval.idade, aval.circ_punho, aval.circ_abd, 
+                        aval.circ_gluteo, aval.porc_gordura, aval.massa_gordura, aval.massa_magra, aval.porc_massa_musc, aval.massa_muscu,
+                        aval.ingestao_calorica, aval.taxa_metabolica, aval.diferenca, id]
+        const avaliacaoAtualizada = await client.query(sql, values)
+
+        await client.end()
+        return avaliacaoAtualizada.rows[0]
+    } catch (error) { throw error }
+}
+
+async function deletarAvaliacao(id) {
+    const client = new Client(conexao)
+    client.connect()
+
+    try {
+        const sql = `DELETE FROM avaliacao WHERE id = $1 RETURNING *`
+        const values = [id]
+        const avaliacaoDeletada = await client.query(sql, values)
+
+        await client.end()
+        return avaliacaoDeletada.rows[0]
+    } catch (error) { throw error }
+}
+
 module.exports = {
     addAval,
     buscarAvaliacoes,
-    buscarAvaliacoesAluno
+    buscarAvaliacoesAluno,
+    atualizarAvaliacao,
+    deletarAvaliacao
 }
