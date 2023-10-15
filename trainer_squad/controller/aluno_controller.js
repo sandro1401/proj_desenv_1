@@ -16,7 +16,7 @@ async function addAluno(req, res) {
         if (error.status) {
             res.status(error.status).json(error)
         } else {
-            res.status(500).json({message: "Erro interno!"})
+            res.status(402).json({message: "Aluno já cadastrado!"})
         }
     }
 }
@@ -80,6 +80,20 @@ async function buscarAlunoPorId(req, res) {
         }
     }
 }
+async function buscarAlunoPorCpf(req, res) {
+    const cpf = req.params.cpf
+
+    try {
+        const cpfAluno = await negocio.buscarAlunoPorCpf(cpf)
+        res.status(200).json(cpfAluno)
+    } catch (error) {
+        if (error.status) {
+            res.status(error.status).json(error)
+        } else {
+            res.status(500).json({message: "Erro interno!"}) // verificar
+        }
+    }
+}
 
 // Update
 async function atualizarAluno(req, res) {
@@ -98,22 +112,7 @@ async function atualizarAluno(req, res) {
     }
 }
 
-// Update - senha
-// async function autalizarSenha(req, res) {
-//     const id = req.params.id
-//     const senha = req.body
 
-//     try {
-//         const senhaAtualizada = await negocio.autalizarSenha(id, senha)
-//         res.status(200).json(senhaAtualizada)
-//     } catch (error) {
-//         if (error.status) {
-//             res.status(error.status).json(error)
-//         } else {
-//             res.status(500).json({message: "Erro interno!"})
-//         }
-//     }
-// }
 
 // Delete
 async function deletarAluno(req, res) {
@@ -126,6 +125,7 @@ async function deletarAluno(req, res) {
         if (error.status) {
             res.status(error.status).json(error)
         } else {
+            console.log(error)
             res.status(500).json({message: "Erro interno!"})
         }
     }
@@ -137,6 +137,7 @@ module.exports = {
     buscarAlunoPorNome,
     buscarAlunoPorEmail,
     buscarAlunoPorId,
+    buscarAlunoPorCpf,
     atualizarAluno,
     deletarAluno
    
