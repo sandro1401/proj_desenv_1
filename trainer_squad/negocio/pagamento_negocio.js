@@ -61,8 +61,8 @@ async function buscarPagamentoPorId(id) {
 
 // Update
 async function atualizarPagamento(id, pagamentos) {
-    if (pagamentos && pagamentos.idAluno && pagamentos.dt_pagamento && pagamentos.status && pagamentos.valor) {
-        const pagamentoAtualizado = await persistencia.atualizarAluno(id, pagamentos)
+    if (pagamentos && pagamentos.id_aluno && pagamentos.dt_pagamento && pagamentos.status && pagamentos.valor) {
+        const pagamentoAtualizado = await persistencia.atualizarPagamento(id, pagamentos)
 
         if (!pagamentoAtualizado) {
             let erro = new Error()
