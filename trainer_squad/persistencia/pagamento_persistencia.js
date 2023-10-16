@@ -17,7 +17,7 @@ async function addPagamento(idAluno, pagamento) {
                     VALUES ($1,$2,$3,$4) RETURNING *`
         const values = [idAluno, pagamento.dt_pagamento, pagamento.status, pagamento.valor]
 
-        const treinos = await client.query(sql, values) 
+        const pagamento = await client.query(sql, values) 
 
         await client.end()
         return pagamento.rows[0]
@@ -58,7 +58,7 @@ async function atualizarPagamento(id, pagamentos) {
     client.connect()
 
     try {
-        const sql = `UPDATE pagamento SET id_aluno = $1, dt_pagamento = $2, status  = $3, valor = $4 WHERE id = $5 RETURNING *`
+        const sql = `UPDATE pagamento SET id_aluno = $1, dt_pagamento = $2, status = $3, valor = $4 WHERE id = $5 RETURNING *`
         const values = [pagamentos.id_aluno, pagamentos.dt_pagamento, pagamentos.status, pagamentos.valor, id ]
         const pagamentoAtualizado = await client.query(sql, values)
 
