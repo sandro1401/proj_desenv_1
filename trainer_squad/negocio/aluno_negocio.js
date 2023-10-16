@@ -125,9 +125,9 @@ async function buscarAlunoPorCpf(cpf) {
 }
 
 
-// Update
+// // Update
 async function atualizarAluno(id, alunos) {
-    if (alunos && alunos.nome && alunos.email) {
+    if (alunos && alunos.sexo && alunos.nome && alunos.cpf && alunos.dt_nascimento && alunos.telefone && alunos.email &&  alunos.status && alunos.plano && alunos.idusuario) {
         const alunoAtualizado = await persistencia.atualizarAluno(id, alunos)
 
         if (!alunoAtualizado) {
@@ -136,10 +136,10 @@ async function atualizarAluno(id, alunos) {
             erro.status = 404
             throw erro
         }
-
         return alunoAtualizado
     } else {
         let erro = new Error()
+        console.log(erro)
         erro.message = "Todos os campos são obrigatórios."
         erro.status = 400
         throw erro
