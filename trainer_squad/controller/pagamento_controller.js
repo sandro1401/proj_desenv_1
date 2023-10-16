@@ -18,6 +18,7 @@ async function addPagamento(req, res) {
         if (error.status) {
             res.status(error.status).json(error)
         } else {
+            
             res.status(500).json({message: "Erro interno!"})
         }
     }
@@ -65,7 +66,7 @@ async function atualizarPagamento(req, res) {
     } catch (error) {
         if (error.status) {
             res.status(error.status).json(error)
-        } else {
+        } else {console.log(error)
             res.status(500).json({message: "Erro interno!"})
         }
     }
