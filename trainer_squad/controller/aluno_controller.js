@@ -105,8 +105,10 @@ async function atualizarAluno(req, res) {
         res.status(200).json(alunoAtualizado)
     } catch (error) {
         if (error.status) {
+           
             res.status(error.status).json(error)
         } else {
+            console.log(error)
             res.status(500).json({message: "Erro interno!"})
         }
     }
