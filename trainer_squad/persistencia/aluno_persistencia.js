@@ -105,37 +105,50 @@ async function buscarAlunoPorCpf(cpf) {
 }
 
 
-// Update
+// // Update
 async function atualizarAluno(id, alunos) {
     const client = new Client(conexao)
     client.connect()
 
     try {
-        const sql = `UPDATE aluno SET sexo = $1, nome, = $2 cpf = $3, dt_nascimento = $4, telefone = $5, email = $6, status = $7, plano = $8, idusuario = $9 WHERE id = $10 RETURNING *`
-        const values = [alunos.sexo, alunos.nome, alunos.cpf, alunos.dt_nascimento, alunos.telefone, alunos.email,  alunos.status, alunos.plano, alunos.idusuario, id]
+        const sql = `UPDATE aluno SET sexo = $1, nome = $2, cpf = $3, dt_nascimento = $4, telefone = $5, email = $6, status = $7, plano = $8, idusuario = $9 WHERE id = $10 RETURNING *`
+        const values = [alunos.sexo, alunos.nome, alunos.cpf, alunos.dt_nascimento, alunos.telefone, alunos.email, alunos.status, alunos.plano, alunos.idusuario, id]
         const AlunoAtualizado = await client.query(sql, values)
 
         client.end()
         return AlunoAtualizado.rows[0]
-    } catch (error) { throw error }
+    } catch (error) {throw error }
 }
 
 
-
-// Delete
-// async function deletarAluno(id) {
+//ATUALIZA ALUNO + PAGAMENTO
+// async function atualizarAluno(id, alunos) {
+//     let alunoAtualizado
 //     const client = new Client(conexao)
 //     client.connect()
 
 //     try {
-//         const sql = `DELETE FROM aluno WHERE id = $1 RETURNING *`
-//         const values = [id]
-//         const alunoDeletado = await client.query(sql, values)
+//         await client.query('BEGIN')
+//         const sql = `UPDATE aluno SET sexo = $1, nome = $2, cpf = $3, dt_nascimento = $4, telefone = $5, email = $6, status = $7, plano = $8, idusuario = $9 WHERE id = $10 RETURNING *`
+//         const values = [alunos.sexo, alunos.nome, alunos.cpf, alunos.dt_nascimento, alunos.telefone, alunos.email, alunos.status, alunos.plano, alunos.idusuario, id]
+//         alunoAtualizado = await client.query(sql, values)
 
-//         client.end()
-//         return alunoDeletado.rows[0]
-//     } catch (error) { throw error }
+//         const sqlPag = `UPDATE pagamento SET id_aluno = $1, dt_pagamento = $2, status = $3, valor = $4 WHERE id_aluno = $5 RETURNING *`
+//         const valuesPag = [id, alunos.pagamento.dt_pagamento, alunos.pagamento.status, alunos.pagamento.valor, id ]
+//         const pagamentoAtualizado = await client.query(sqlPag, valuesPag)
+//         await client.query('COMMIT')
+//         return { aluno: alunoAtualizado.rows[0], pagamento: pagamentoAtualizado.rows[0] };
+//     } catch (error) {
+//         await client.query('ROLLBACK'); 
+//         throw error;
+//     } finally {
+//         client.end() 
+//     }
 // }
+
+
+// Delete
+
 
 async function deletarAluno(id) {
     let AlunoDeletado
