@@ -15,7 +15,7 @@ async function addAluno(idUsuario, aluno) {
 
         const sql = `INSERT INTO aluno(sexo, nome, cpf, dt_nascimento, telefone, email, status, plano, idUsuario)
                                 VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING id`
-        const values = [aluno.sexo, aluno.nome, aluno.cpf, aluno.dt_nascimento, aluno.telefone, aluno.email, aluno.status, 
+        const values = [aluno.sexo, aluno.nome, aluno.cpf, aluno.dt_nascimento, aluno.telefone, aluno.email, 'ATIVO', 
                         aluno.plano, idUsuario]       
         resAluno = await client.query(sql, values)                         
 
