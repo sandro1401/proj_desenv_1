@@ -37,7 +37,7 @@ CREATE TABLE avaliacao
 CREATE TABLE pagamento 
 ( id serial not null,
  id_aluno INT, 
- dt_pagamento INT,    
+ dt_pagamento DATE,    
  status VARCHAR(30),  
  valor FLOAT, 
 	PRIMARY KEY(id)
