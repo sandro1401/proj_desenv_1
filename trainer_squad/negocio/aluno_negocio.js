@@ -26,8 +26,7 @@ const persistencia = require('../persistencia/aluno_persistencia')
 
 async function addAluno(idUsuario, aluno) {
     console.log("Conteúdo do objeto aluno recebido:", aluno)
-    if (aluno && aluno.sexo && aluno.nome && aluno.cpf && aluno.dt_nascimento && aluno.telefone && aluno.email && aluno.status
-        && aluno.plano && idUsuario) {
+    if (aluno && aluno.sexo && aluno.nome && aluno.cpf && aluno.dt_nascimento && aluno.telefone && aluno.email && aluno.plano && idUsuario) {
             const alunoBuscadoPorCpf = await persistencia.buscarAlunoPorCpf(aluno.cpf);
             if(!alunoBuscadoPorCpf){
             try {
